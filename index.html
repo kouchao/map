@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>地下停车位地图</title>
+    <link rel="stylesheet" href="css/amazeui.css">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+<div class="am-modal am-modal-no-btn" tabindex="-1" id="doc-modal-1">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">设置map
+            <a href="javascript: void(0)" class="am-close am-close-spin" data-am-modal-close>&times;</a>
+        </div>
+        <div class="am-modal-bd">
+
+            <form action="" class="am-form">
+
+                <div class="am-form-group">
+                    <input type="number" id="width" minlength="3" placeholder="每个格子的宽度" class="am-form-field" required/>
+                </div>
+                <div class="am-form-group">
+                    <input type="number" id="height" minlength="3" placeholder="每个格子的高度" class="am-form-field" required/>
+                </div>
+                <div class="am-form-group">
+                    <input type="number" id="row" minlength="3" placeholder="总行数" class="am-form-field" required/>
+                </div>
+                <div class="am-form-group">
+                    <input type="number" id="col" minlength="3" placeholder="总列数" class="am-form-field" required/>
+                </div>
+
+            </form>
+
+            <button class="am-btn am-btn-success am-topbar-btn am-btn-sm initGrid">生成</button>
+
+        </div>
+    </div>
+</div>
+
+<div class="am-modal am-modal-prompt" tabindex="-1" id="my-prompt">
+    <div class="am-modal-dialog">
+        <div class="am-modal-hd">Amaze UI</div>
+        <div class="am-modal-bd">
+            来来来，吐槽点啥吧
+            <input type="text" class="am-modal-prompt-input">
+        </div>
+        <div class="am-modal-footer">
+            <span class="am-modal-btn" data-am-modal-cancel>取消</span>
+            <span class="am-modal-btn" data-am-modal-confirm>提交</span>
+        </div>
+    </div>
+</div>
+
+<header class="am-topbar am-topbar-fixed-top">
+    <h1 class="am-topbar-brand">
+        <a href="#">地下停车位地图</a>
+    </h1>
+
+    <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only"
+            data-am-collapse="{target: '#doc-topbar-collapse'}"><span class="am-sr-only">导航切换</span> <span
+            class="am-icon-bars"></span></button>
+    <div class="am-collapse am-topbar-collapse" id="doc-topbar-collapse">
+        <ul class="am-nav am-nav-pills am-topbar-nav">
+            <li class="am-active">
+
+
+                <button
+                        type="button"
+                        class="am-btn am-btn-success am-topbar-btn am-btn-sm"
+                        data-am-modal="{target: '#doc-modal-1', closeViaDimmer: 0}">
+                    生成map
+                </button>
+
+
+            </li>
+            <li>
+                <button class="am-btn am-btn-danger am-topbar-btn am-btn-sm" onclick="clearMap()">清空map</button>
+            </li>
+
+            <li>
+                <button class="am-btn am-btn-danger am-topbar-btn am-btn-sm" onclick="test()">测试</button>
+            </li>
+            <li>
+                <button data-role="startP" class="am-btn am-topbar-btn am-btn-sm ele">
+                    <i class="am-icon-circle am-text-success"></i>设置起始点
+                </button>
+            </li>
+            <li>
+                <button data-role="endP" class="am-btn am-topbar-btn am-btn-sm ele">
+                    <i class="am-icon-circle am-text-danger"></i>设置结束
+                </button>
+
+            </li>
+
+        </ul>
+    </div>
+</header>
+
+
+<div class="am-g content">
+    <div class="am-u-sm-2 left">
+        <div data-am-widget="tabs"
+             class="am-tabs am-tabs-d2"
+        >
+            <ul class="am-tabs-nav am-cf">
+                <li class="am-active"><a href="[data-tab-panel-0]">路</a></li>
+                <li class=""><a href="[data-tab-panel-1]">车位</a></li>
+                <li class=""><a href="[data-tab-panel-2]">墙</a></li>
+                <li class=""><a href="[data-tab-panel-2]">空地</a></li>
+            </ul>
+            <div class="am-tabs-bd ">
+                <div data-tab-panel-0 class="am-tab-panel am-active">
+
+                    <section class="am-panel am-panel-default">
+                        <header class="am-panel-hd">
+                            <h3 class="am-panel-title">水平道路</h3>
+                        </header>
+                        <div class="am-panel-bd">
+                            <div class="center">
+                                <img data-eid="r1" data-role="2" class="ele " src="img/r1.png" alt="" id="r1">
+                                <img data-eid="r3" data-role="2" class="ele " src="img/r3.png" alt="" id="r3">
+                            </div>
+                            <div class="center">
+                                <div>上</div>
+                                <div>下</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="am-panel am-panel-default">
+                        <header class="am-panel-hd">
+                            <h3 class="am-panel-title">垂直道路</h3>
+                        </header>
+                        <div class="am-panel-bd">
+                            <div class="center">
+                                <img data-eid="r4" data-role="2" class="ele " src="img/r4.png" alt="" id="r4">
+                                <img data-eid="r2" data-role="2" class="ele " src="img/r2.png" alt="" id="r2">
+                            </div>
+                            <div class="center">
+                                <div>左</div>
+                                <div>右</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="am-panel am-panel-default">
+                        <header class="am-panel-hd">
+                            <h3 class="am-panel-title">外拐弯道路</h3>
+                        </header>
+                        <div class="am-panel-bd">
+
+                            <div class="center">
+                                <img data-eid="r8" data-role="2" class="ele " src="img/r8.png" alt="" id="r8">
+                                <img data-eid="r5" data-role="2" class="ele " src="img/r5.png" alt="" id="r5">
+                            </div>
+                            <div class="center">
+                                <div>上右弯</div>
+                                <div>右下弯</div>
+                            </div>
+                            <div class="center">
+                                <img data-eid="r7" data-role="2" class="ele " src="img/r7.png" alt="" id="r7">
+                                <img data-eid="r6" data-role="2" class="ele " src="img/r6.png" alt="" id="r6">
+                            </div>
+                            <div class="center">
+                                <div>下右弯</div>
+                                <div>右上弯</div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <section class="am-panel am-panel-default">
+                        <header class="am-panel-hd">
+                            <h3 class="am-panel-title">内拐弯道路</h3>
+                        </header>
+                        <div class="am-panel-bd">
+
+                            <div class="center">
+                                <img data-eid="r9" data-role="2" class="ele am-thumbnail" src="img/r9.png" alt="" id="r9">
+                                <img data-eid="r10" data-role="2" class="ele am-thumbnail" src="img/r10.png" alt="" id="r10">
+                            </div>
+                            <div class="center">
+                                <div>上右弯</div>
+                                <div>右下弯</div>
+                            </div>
+                            <div class="center">
+                                <img data-eid="r12" data-role="2" class="ele am-thumbnail" src="img/r12.png" alt="" id="r12">
+                                <img data-eid="r11" data-role="2" class="ele am-thumbnail" src="img/r11.png" alt="" id="r11">
+                            </div>
+                            <div class="center">
+                                <div>下右弯</div>
+                                <div>右上弯</div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <section class="am-panel am-panel-default">
+                        <header class="am-panel-hd">
+                            <h3 class="am-panel-title">出入口</h3>
+                        </header>
+                        <div class="am-panel-bd">
+                            <div class="center">
+                                <img data-eid="enter" data-role="2" class="ele " src="img/入口.png" alt="" id="enter">
+                                <img data-eid="exit" data-role="2" class="ele " src="img/出口.png" alt="" id="exit">
+                            </div>
+                            <div class="center">
+                                <div>入口</div>
+                                <div>出口</div>
+                            </div>
+                        </div>
+                    </section>
+
+
+                </div>
+                <div data-tab-panel-1 class="am-tab-panel ">
+
+                    <section class="am-panel am-panel-default">
+                        <header class="am-panel-hd">
+                            <h3 class="am-panel-title">下侧车位</h3>
+                        </header>
+                        <div class="am-panel-bd">
+
+                            <div class="center">
+                                <img data-eid="p1" data-role="1" class="ele am-thumbnail" id="p1" src="img/p1.png" alt="">
+                                <img data-eid="p7" data-role="1" class="ele am-thumbnail" id="p7" src="img/p7.png" alt="">
+                            </div>
+                            <div class="center">
+                                <div>头部</div>
+                                <div>尾部</div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <section class="am-panel am-panel-default">
+                        <header class="am-panel-hd">
+                            <h3 class="am-panel-title">下侧车位</h3>
+                        </header>
+                        <div class="am-panel-bd">
+
+                            <div class="center">
+                                <img data-eid="p3" data-role="1" class="ele am-thumbnail" id="p3" src="img/p3.png" alt="">
+                                <img data-eid="p5" data-role="1" class="ele am-thumbnail" id="p5" src="img/p5.png" alt="">
+                            </div>
+                            <div class="center">
+                                <div>头部</div>
+                                <div>尾部</div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <section class="am-panel am-panel-default">
+                        <header class="am-panel-hd">
+                            <h3 class="am-panel-title">右侧车位</h3>
+                        </header>
+                        <div class="am-panel-bd">
+
+                            <div class="center">
+                                <img data-eid="p6" data-role="1" class="ele am-thumbnail" id="p6" src="img/p6.png" alt="">
+                                <img data-eid="p4" data-role="1" class="ele am-thumbnail" id="p4" src="img/p4.png" alt="">
+                            </div>
+                            <div class="center">
+                                <div>头部</div>
+                                <div>尾部</div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <section class="am-panel am-panel-default">
+                        <header class="am-panel-hd">
+                            <h3 class="am-panel-title">左侧车位</h3>
+                        </header>
+                        <div class="am-panel-bd">
+
+                            <div class="center">
+                                <img data-eid="p2" data-role="1" class="ele am-thumbnail" id="p2" src="img/p2.png" alt="">
+                                <img data-eid="p8" data-role="1" class="ele am-thumbnail" id="p8" src="img/p8.png" alt="">
+                            </div>
+                            <div class="center">
+                                <div>尾部</div>
+                                <div>头部</div>
+                            </div>
+
+                        </div>
+                    </section>
+
+
+                </div>
+                <div data-tab-panel-2 class="am-tab-panel ">
+                    <img data-eid="wall" data-role="0" class="ele am-thumbnail" id="wall" src="img/墙.png" alt="">
+                </div>
+                <div data-tab-panel-2 class="am-tab-panel ">
+                    <img data-eid="nulll" data-role="-1" class="ele am-thumbnail" id="nulll" src="img/nulll.png" alt="">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="am-u-sm-10 right">
+        <canvas id="myCanvas" style="border:1px solid #c3c3c3;">
+            您的浏览器不支持画布功能！
+        </canvas>
+
+    </div>
+
+
+</div>
+
+
+<script src="js/lib/jquery.js"></script>
+<script src="js/lib/amazeui.js"></script>
+<script src="js/lib/way.js"></script>
+<script src="js/app/index.js"></script>
+</body>
+</html>
